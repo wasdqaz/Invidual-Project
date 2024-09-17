@@ -56,7 +56,7 @@ class Engine:
 
     def reset(self):
         self.GAME_OVER = False
-        self.FLYING = True
+        self.FLYING = False
         self.score = 0
         self.pass_pipe = False
         self.LAST_PIPE = pygame.time.get_ticks()
@@ -120,6 +120,7 @@ class Engine:
     def handle_gameover (self):
         if self.draw_button():
             self.reset()
+
     def run_game(self):
         running = True
         while running:
