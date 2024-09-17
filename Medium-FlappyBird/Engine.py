@@ -4,6 +4,7 @@ from pygame.locals import *
 from Bird import Bird
 from Pipe import Pipe
 
+
 class Engine:
     def __init__(self):
         # Initialize Pygame
@@ -23,8 +24,8 @@ class Engine:
         self.FLYING = False
         self.GAME_OVER = False
         self.score = 0
-        self.pass_pipe = False
         self.TIME_FREQUENCY = 1500
+        self.pass_pipe = False
         self.LAST_PIPE = pygame.time.get_ticks()
 
         # Set up display
@@ -34,6 +35,13 @@ class Engine:
         # Load assets
         self.background = pygame.image.load('asset/bg.png')
         self.ground = pygame.image.load('asset/ground.png')
+        self.button = pygame.image.load('asset/restart.png')
+
+        #create button
+        self.button_rect = self.button.get_rect()
+        self.button_X_POS = self.SCREEN_WIDTH / 2 - self.button_rect.width / 2
+        self.button_Y_POS = self.SCREEN_HEIGHT / 2 - self.button_rect.height / 2
+        self.button_rect.topleft = (self.button_X_POS, self.button_Y_POS)
 
         # Font
         self.font = pygame.font.SysFont('Bauhaus 93', 60)
@@ -46,6 +54,24 @@ class Engine:
         self.flappy = Bird(100, int(self.SCREEN_HEIGHT / 2) - 100)
         self.bird_group.add(self.flappy)
 
+    def reset(self):
+        self.GAME_OVER = False
+        self.FLYING = True
+        self.score = 0
+        self.pass_pipe = False
+        self.LAST_PIPE = pygame.time.get_ticks()
+        self.flappy.reset(100, int(self.SCREEN_HEIGHT / 2) - 100)
+        self.pipe_group.empty()
+
+    def draw_button(self):
+        action = False
+        pos = pygame.mouse.get_pos()
+        if self.button_rect.collidepoint(pos):
+            if pygame.mouse.get_pressed()[0] == 1:
+                action = True
+
+        self.screen.blit(self.button, self.button_rect)
+        return action
     def draw_text(self, text, color, x, y):
         img = self.font.render(text, True, color)
         self.screen.blit(img, (x, y))
@@ -84,13 +110,16 @@ class Engine:
                 self.score += 1
                 self.pass_pipe = False
 
-    def handle_input(self, event):
+    def handle_event(self, event):
         if event.type == pygame.QUIT:
             return False
         if event.type == pygame.KEYDOWN and not self.FLYING:
             self.FLYING = True
         return True
 
+    def handle_gameover (self):
+        if self.draw_button():
+            self.reset()
     def run_game(self):
         running = True
         while running:
@@ -121,8 +150,9 @@ class Engine:
 
             # Handle input
             for event in pygame.event.get():
-                running = self.handle_input(event)
-
+                running = self.handle_event(event)
+            if self.GAME_OVER == True:
+                self.handle_gameover()
             pygame.display.update()
 
         pygame.quit()

@@ -47,3 +47,9 @@ class Bird(pygame.sprite.Sprite):
             self.image = pygame.transform.rotate(self.images[self.index], self.velocity * -3)
         else:
             self.image = pygame.transform.rotate(self.images[self.index], -90)
+    def reset(self, x, y):
+        self.index = 0
+        self.animation_speed = 0
+        self.velocity = 0
+        self.clicked = False
+        self.rect.center = [x, y]

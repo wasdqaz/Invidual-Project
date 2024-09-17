@@ -18,3 +18,5 @@ class Pipe(pygame.sprite.Sprite):
             self.rect.x -= scroll_speed
         if self.rect.right < 0:
             self.kill()
+    def reset(self, x):
+        self.rect.x = x
