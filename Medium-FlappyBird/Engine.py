@@ -132,7 +132,7 @@ class Engine:
             self.bird_group.update(self.FLYING, self.GAME_OVER)
             self.pipe_group.draw(self.screen)
             self.pipe_group.update(self.LOOP_SPEED, self.GAME_OVER)
-
+            
             # Draw ground
             self.screen.blit(self.ground, (self.GROUND_X_POS, self.GROUND_Y_POS))
             if self.GAME_OVER == False:
